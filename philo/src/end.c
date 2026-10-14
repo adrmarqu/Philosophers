@@ -87,7 +87,7 @@ void	check_end(t_data *data)
 	}
 	while (!data->end)
 	{
-		usleep(3000);
+		usleep(1000);
 		ft_end(data);
 	}
 }

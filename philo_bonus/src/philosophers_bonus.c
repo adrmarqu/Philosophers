@@ -30,12 +30,13 @@ void	*philo_end(void *arg)
 		}
 		if (check_death(p))
 		{
-			print_action(p, DEATH);
 			sem_wait(p->tbl_dir->table_sem);
+			printf("%ld\t%d\t%s\n", (get_time() - p->tbl.start_time) / 1000,
+				p->id, DEATH);
 			sem_post(p->tbl_dir->end_sem);
 			return (NULL);
 		}
-		usleep(3000);
+		usleep(1000);
 	}
 }
 

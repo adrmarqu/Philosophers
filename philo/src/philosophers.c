@@ -36,7 +36,7 @@ void	*philosophers(void *arg)
 		return (NULL);
 	}
 	if (p->id % 2)
-		usleep(p->tbl.time_eat * 500);
+		ft_usleep(p->tbl.time_eat / 2, p);
 	while (!isdeath(p))
 	{
 		take_forks(p);

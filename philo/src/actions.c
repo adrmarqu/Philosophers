@@ -28,18 +28,18 @@ void	leave_forks(t_philo *p)
 
 void	ft_eat(t_philo *p)
 {
-	print_action(p, EAT);
 	pthread_mutex_lock(&p->mutex_philo);
-	p->n_eat++;
 	p->last_meal = get_time();
+	p->n_eat++;
 	pthread_mutex_unlock(&p->mutex_philo);
-	usleep(p->tbl.time_eat * 1000);
+	print_action(p, EAT);
+	ft_usleep(p->tbl.time_eat, p);
 }
 
 void	ft_sleep(t_philo *p)
 {
 	print_action(p, SLEEP);
-	usleep(p->tbl.time_sleep * 1000);
+	ft_usleep(p->tbl.time_sleep, p);
 }
 
 void	ft_think(t_philo *p)

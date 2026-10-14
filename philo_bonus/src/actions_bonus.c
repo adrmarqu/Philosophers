@@ -28,14 +28,14 @@ void	leave_forks(t_philo *p)
 
 void	ft_eat(t_philo *p)
 {
-	print_action(p, EAT);
-	p->n_eat++;
 	p->last_meal = get_time();
-	usleep(p->tbl.time_eat * 1000);
+	p->n_eat++;
+	print_action(p, EAT);
+	ft_usleep(p->tbl.time_eat);
 }
 
 void	ft_sleep(t_philo *p)
 {
 	print_action(p, SLEEP);
-	usleep(p->tbl.time_sleep * 1000);
+	ft_usleep(p->tbl.time_sleep);
 }

@@ -31,8 +31,8 @@ OBJ = $(addprefix $(OBJ_D), $(OBJ_F))
 all: $(NAME)
 
 $(NAME): $(OBJ_D) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-	@echo "Created philo"
+	@$(CC) $(CFLAGS) -pthread $(OBJ) -o $(NAME)
+	@echo "Created philo_bonus"
 
 $(OBJ_D)%.o: $(SRC_D)%.c Makefile inc/philo_bonus.h
 	$(CC) $(CFLAGS) -MMD -c $< -o $@

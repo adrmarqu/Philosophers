@@ -17,8 +17,16 @@ long	get_time(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	tv.tv_sec %= 31556925;
-	return (tv.tv_sec * 1e6 + tv.tv_usec);
+	return ((long)tv.tv_sec * 1000000 + tv.tv_usec);
+}
+
+void	ft_usleep(long time_in_ms)
+{
+	long	start;
+
+	start = get_time();
+	while ((get_time() - start) / 1000 < time_in_ms)
+		usleep(250);
 }
 
 int	check_death(t_philo *p)

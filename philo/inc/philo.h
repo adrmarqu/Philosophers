@@ -80,6 +80,7 @@ void	destroy_mutex(t_data *da);
 void	check_end(t_data *da);
 
 long	get_time(void);
+void	ft_usleep(long time_in_ms, t_philo *p);
 int		has_eaten(t_philo *p);
 int		isdeath(t_philo *p);
 int		check_death(t_philo *p);

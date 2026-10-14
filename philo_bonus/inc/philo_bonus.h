@@ -19,10 +19,10 @@
 # define THINK "is thinking"
 # define DEATH "died"
 
-# define SEM_FORKS "forks"
-# define SEM_TABLE "table"
-# define SEM_END "end"
-# define SEM_MEAL "meal"
+# define SEM_FORKS "/forks"
+# define SEM_TABLE "/table"
+# define SEM_END "/end"
+# define SEM_MEAL "/meal"
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -33,6 +33,7 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <signal.h>
 # include <limits.h>
 
 typedef struct s_table
@@ -85,6 +86,7 @@ void	ft_eat(t_philo *p);
 void	ft_sleep(t_philo *p);
 
 long	get_time(void);
+void	ft_usleep(long time_in_ms);
 int		check_death(t_philo *p);
 
 void	ft_error(const char *s);

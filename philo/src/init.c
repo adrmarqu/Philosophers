@@ -73,9 +73,12 @@ int	init_data(t_data *da, char **av)
 {
 	if (get_data(&da->table, av))
 		return (1);
+	da->philo = NULL;
+	da->table.threads = NULL;
+	da->table.forks = NULL;
 	da->philo = malloc(da->table.n_philo * sizeof(t_philo));
-	da->table.threads = malloc(da->table.n_philo * sizeof(t_philo));
-	da->table.forks = malloc(da->table.n_philo * sizeof(t_philo));
+	da->table.threads = malloc(da->table.n_philo * sizeof(pthread_t));
+	da->table.forks = malloc(da->table.n_philo * sizeof(pthread_mutex_t));
 	if (!da->philo || !da->table.forks || !da->table.threads)
 		return (ft_free(da), ft_error("Memory reservation failed"), 1);
 	if (init_forks(&da->table) || init_philos(da))

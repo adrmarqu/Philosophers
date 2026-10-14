@@ -87,7 +87,7 @@ int	atoi_space(char *str, int *nbr)
 		n = n * 10 + num[i++] - '0';
 	}
 	if (ft_strlen(num) > 12 || n > INT_MAX)
-		return (ft_error("Data out of limits (int)"), 1);
+		return (free(num), ft_error("Data out of limits (int)"), 1);
 	free(num);
 	*nbr = (int)n;
 	return (0);
