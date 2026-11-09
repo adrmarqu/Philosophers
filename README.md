@@ -1,157 +1,103 @@
-# Philosophers
+# Philosophers - 42 Barcelona
 
-A 42 School project simulating Dijkstra's classic **Dining Philosophers Problem** to study concurrent programming, multithreading, multiprocessing, and synchronization primitives.
+Philosophers is a concurrent programming project from the 42 Barcelona curriculum. The project models Edsger Dijkstra's famous Dining Philosophers Problem to study the challenges of concurrent systems, including thread lifecycle, process management, race conditions, deadlocks, and shared resource synchronization.
 
----
+The project provides two independent implementations:
+- Mandatory Part (philo): Implemented using POSIX threads (pthread) and mutual exclusion locks (mutexes) in a shared memory environment.
+- Bonus Part (philo_bonus): Implemented using distinct child processes (fork) and POSIX named semaphores (sem_open, sem_wait, sem_post) in isolated address spaces.
 
-## Overview
+# Prerequisites
 
-The project consists of two implementations:
-- **Mandatory (`philo`)**: Implemented using **threads** and **mutexes** (shared memory concurrency).
-- **Bonus (`philo_bonus`)**: Implemented using **processes** (`fork`) and **POSIX named semaphores** (isolated memory concurrency).
+To compile and execute the simulation, you will need:
 
----
+- A C compiler: gcc or clang (supporting C99 or later)
+- GNU Make
+- POSIX threads library (pthread) and standard C library
+- Compatible Operating System: Linux or macOS
 
-## Requirements & Prerequisites
+# Configuration
 
-To build and run this project, you need:
-- **Operating System**: Linux or macOS.
-- **Compiler**: `gcc` or `clang` (supporting C99 or later).
-- **Build tool**: `make`.
-- **Standard C library** and **POSIX threads library** (`pthread`).
-
-### Installing Prerequisites
-
-#### Debian / Ubuntu / Linux Mint
+1. Clone the repository:
 ```bash
-sudo apt update
-sudo apt install build-essential
+git clone https://github.com/adrmarqu/philosophers.git
+cd philosophers
 ```
 
-#### macOS
-Install the Xcode Command Line Tools:
-```bash
-xcode-select --install
-```
+No external packages or dependencies are required. Both implementations rely solely on native POSIX system calls.
 
----
+# Execution
 
-## Compilation
+### 1. Mandatory Implementation (philo)
 
-Clone the repository and enter the directory:
-
-```bash
-git clone <repository-url>
-cd philo
-```
-
-### 1. Mandatory Part (`philo`)
-Uses threads and mutexes:
-
+Compile and launch using threads and mutexes:
 ```bash
 cd philo
 make
-```
-This produces the executable `philo`.
-
-### 2. Bonus Part (`philo_bonus`)
-Uses child processes and named semaphores:
-
-```bash
-cd philo_bonus
-make
-```
-This produces the executable `philo_bonus`.
-
-### Cleaning Build Files
-
-To remove object files:
-```bash
-make clean
-```
-
-To remove object files and the compiled executable:
-```bash
-make fclean
-```
-
-To recompile from scratch:
-```bash
-make re
-```
-
----
-
-## Usage
-
-Both executables take the same command-line arguments:
-
-```bash
 ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
 ```
 
-Or for the bonus version:
+### 2. Bonus Implementation (philo_bonus)
 
+Compile and launch using processes and named semaphores:
 ```bash
+cd ../philo_bonus
+make
 ./philo_bonus <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
 ```
 
-### Arguments Description
+### Command Line Arguments
 
-| Parameter | Description |
-| :--- | :--- |
-| `number_of_philosophers` | The number of philosophers and forks on the table (1 to 200). |
-| `time_to_die` | Time in milliseconds before a philosopher dies if they have not started eating. |
-| `time_to_eat` | Time in milliseconds it takes for a philosopher to eat. |
-| `time_to_sleep` | Time in milliseconds a philosopher spends sleeping. |
-| `[number_of_times_each_philosopher_must_eat]` | *(Optional)* The simulation stops once all philosophers have eaten at least this many times. If omitted, the simulation runs until a philosopher dies. |
+- number_of_philosophers: The count of philosophers seated at the round table (and the number of forks).
+- time_to_die: Time in milliseconds before a philosopher starves if they do not start eating.
+- time_to_eat: Time in milliseconds required to finish a meal while holding two forks.
+- time_to_sleep: Time in milliseconds a philosopher spends sleeping after finishing their meal.
+- number_of_times_each_philosopher_must_eat: (Optional) If specified, the simulation terminates cleanly once every philosopher has eaten at least this many meals. If omitted, the simulation runs indefinitely until a philosopher dies.
 
----
+### Simulation Examples
 
-## Examples
+- Single philosopher scenario (must die after time_to_die):
+  ./philo 1 800 200 200
+- Standard infinite survival simulation (no philosopher should die):
+  ./philo 5 800 200 200
+- Finite simulation terminating on meal completion:
+  ./philo 5 800 200 200 7
+- Stress test under tight deadlines:
+  ./philo 4 410 200 200
 
-### 1. Single philosopher (must die)
-```bash
-./philo 1 800 200 200
+# Project Structure
+
 ```
-*Expected: The philosopher takes one fork and dies after 800ms due to lack of a second fork.*
-
-### 2. Standard simulation (no one should die)
-```bash
-./philo 5 800 200 200
+philosophers/
+├── en.subject.pdf           # 42 School English project specification
+├── es.subject.pdf           # 42 School Spanish project specification
+├── philo/                   # Mandatory part (Threads and Mutexes)
+│   ├── Makefile             # Build automation for philo executable
+│   ├── philo.h              # Header declarations and state structs
+│   └── src/                 # Threads, mutexes, timing, and death monitoring
+└── philo_bonus/             # Bonus part (Processes and Semaphores)
+    ├── Makefile             # Build automation for philo_bonus executable
+    ├── philo_bonus.h        # Header declarations for bonus
+    └── src/                 # Child processes, named semaphores, and cleanup
 ```
-*Expected: The philosophers alternate eating, sleeping, and thinking indefinitely without starving.*
 
-### 3. Simulation with meal limit
-```bash
-./philo 5 800 200 200 7
-```
-*Expected: Every philosopher eats at least 7 times, and the simulation terminates cleanly.*
+# Commands and Makefile Targets
 
-### 4. Tight timing test
-```bash
-./philo 4 410 200 200
-```
-*Expected: The philosophers survive continuously without dying.*
+Both philo/ and philo_bonus/ provide a standard Makefile with these targets:
 
-### 5. Starvation scenario
-```bash
-./philo 4 310 200 100
-```
-*Expected: A philosopher dies because the eating schedule cannot be maintained within 310ms.*
+- make or make all: Compiles the source files and produces the binary
+- make clean: Removes compiled object files (.o)
+- make fclean: Removes object files and the compiled executable
+- make re: Rebuilds the executable from scratch
 
----
+# Concurrency and Architecture Features
 
-## Log Output Format
+- Log Synchronization: State transitions (taking forks, eating, sleeping, thinking, dying) are guarded by dedicated output mutexes or semaphores to guarantee messages are never garbled or interleaved.
+- Microsecond Timing Precision: Custom timestamping and sleep routines compensate for system scheduling jitter, ensuring philosophers do not die prematurely due to thread starvation.
+- Clean Resource Cleanup: All mutexes, threads, named semaphores, and child processes are systematically joined, unlocked, closed, unlinked, and terminated upon simulation end.
 
-Every action is printed to stdout in the following format:
+# Author Details
 
-```text
-timestamp_in_ms X has taken a fork
-timestamp_in_ms X is eating
-timestamp_in_ms X is sleeping
-timestamp_in_ms X is thinking
-timestamp_in_ms X died
-```
-- `timestamp_in_ms`: Current timestamp in milliseconds since simulation start.
-- `X`: Philosopher ID (1 to N).
+Author: Adrià Márquez Nebot
+Github: https://github.com/adrmarqu
+LinkedIn: https://www.linkedin.com/in/adria-marquez
+Portfolio: https://adrmarqu.github.io
